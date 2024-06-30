@@ -10,7 +10,6 @@ public class LiquidContainers {
         int maxVolume = 100;
 
         while (true) {
-            System.out.print("> ");
             System.out.println("First: " + firstContainer + "/" + maxVolume);
             System.out.println("Second: " + secondContainer + "/" + maxVolume);
 
@@ -20,14 +19,13 @@ public class LiquidContainers {
             }
 
             String[] parts  = input.split(" ");
-
             String command = parts[0];
             int amount = Integer.valueOf(parts[1]);
 
             if (command.equals("add")) {
                 if (amount > 0) {
                     if ((firstContainer + amount) > 100){
-                        firstContainer = 100;
+                        firstContainer = maxVolume;
                     } else {
                         firstContainer += amount;
                     }
@@ -36,9 +34,28 @@ public class LiquidContainers {
 
             if (command.equals("move")) {
                 if (firstContainer > 0 && amount > 0) {
-                    if ((firstContainer - amount) > 0) {
-                        firstContainer -= amount;
-                        secondContainer += amount;    
+                    if ((firstContainer - amount) >= 0) {
+                        firstContainer = firstContainer - amount;
+                        secondContainer = secondContainer + amount;
+                        if (secondContainer > maxVolume) {
+                            secondContainer = maxVolume;
+                        }    
+                    }
+
+                    else if ((firstContainer - amount) < 0) {
+                        secondContainer += firstContainer;
+                        firstContainer = 0;
+                        if (secondContainer > maxVolume) {
+                            secondContainer = maxVolume;
+                        }
+                    }
+                }
+            }
+
+            if (command.equals("remove")) {
+                if (secondContainer > 0 && amount > 0) {
+                    if ((secondContainer - amount) >= 0) {
+                        secondContainer -= amount;
                     }
                 }
             }
